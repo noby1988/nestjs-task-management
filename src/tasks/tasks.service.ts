@@ -14,19 +14,19 @@ export class TasksService {
     return this.tasksDataService.getTasks(filterDto, user);
   }
 
-  getTaskById(id: string): Promise<Task> {
-    return this.tasksDataService.getTaskById(id);
+  getTaskById(id: string, user: User): Promise<Task> {
+    return this.tasksDataService.getTaskById(id, user);
   }
 
   createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
     return this.tasksDataService.createTask(createTaskDto, user);
   }
 
-  deleteTask(id: string): Promise<void> {
-    return this.tasksDataService.deleteTask(id);
+  deleteTask(id: string, user: User): Promise<void> {
+    return this.tasksDataService.deleteTask(id, user);
   }
 
-  updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
-    return this.tasksDataService.updateTaskStatus(id, status);
+  updateTaskStatus(id: string, status: TaskStatus, user: User): Promise<Task> {
+    return this.tasksDataService.updateTaskStatus(id, status, user);
   }
 }
