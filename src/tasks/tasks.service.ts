@@ -4,21 +4,22 @@ import { Task } from './task.entity';
 import { TasksDataService } from './tasks-data.service';
 import { TaskStatus } from './task-status.enum.';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class TasksService {
   constructor(private readonly tasksDataService: TasksDataService) {}
 
-  getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
-    return this.tasksDataService.getTasks(filterDto);
+  getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
+    return this.tasksDataService.getTasks(filterDto, user);
   }
 
   getTaskById(id: string): Promise<Task> {
     return this.tasksDataService.getTaskById(id);
   }
 
-  createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.tasksDataService.createTask(createTaskDto);
+  createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+    return this.tasksDataService.createTask(createTaskDto, user);
   }
 
   deleteTask(id: string): Promise<void> {
