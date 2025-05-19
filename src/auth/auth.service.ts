@@ -6,10 +6,12 @@ export class AuthService {
   constructor(private readonly authDataService: AuthDataService) {}
 
   signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.authDataService.createUser(authCredentialsDto);
+    return this.authDataService.signUp(authCredentialsDto);
   }
 
-  signIn(authCredentialsDto: AuthCredentialsDto): Promise<string> {
+  signIn(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string }> {
     return this.authDataService.signIn(authCredentialsDto);
   }
 }

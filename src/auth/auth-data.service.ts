@@ -9,15 +9,18 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthDataService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredentialsDto;
     // hash
     const salt = await bcrypt.genSalt();
@@ -42,11 +45,15 @@ export class AuthDataService {
     }
   }
 
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<string> {
+  async signIn(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string }> {
     const { username, password } = authCredentialsDto;
     const user = await this.userRepository.findOne({ where: { username } });
     if (user && (await bcrypt.compare(password, user.password))) {
-      return 'success';
+      const payload: JwtPayload = { username };
+      const accessToken = this.jwtService.sign(payload);
+      return { accessToken };
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }
